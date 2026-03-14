@@ -5,13 +5,13 @@ export interface Pokemon {
 }
 
 export const POKEMON: Pokemon[] = [
-  { id: 1, name: 'Ellodie', image: '../assets/images/ellodie-scaled.png' },
-  { id: 2, name: 'Binky', image: '../assets/images/binky-scaled.png' },
-  { id: 3, name: 'Lapdrie', image: '../assets/images/lapdrie-scaled.png' },
-  { id: 4, name: 'Eternatus', image: '../assets/images/eternatus-scaled.png' },
-  { id: 5, name: 'Morpeko', image: '../assets/images/morpeko-scaled.png' },
-  { id: 6, name: 'Psyduck', image: '../assets/images/psyduck-scaled.png' },
-  { id: 7, name: 'Bunnelby', image: '../assets/images/bunnelby-scaled.png' },
-  { id: 8, name: 'Slugma', image: '../assets/images/slugma-scaled.png' },
-  { id: 9, name: 'Sunflora', image: '../assets/images/sunflora-scaled.png' }
+  { id: 1, name: 'Ellodie', image: '/images/ellodie-scaled.png' },
+  { id: 2, name: 'Binky', image: '/images/binky-scaled.png' },
+  { id: 3, name: 'Lapdrie', image: '/images/lapdrie-scaled.png' },
+  { id: 4, name: 'Eternatus', image: '/images/eternatus-scaled.png' },
+  { id: 5, name: 'Morpeko', image: '/images/morpeko-scaled.png' },
+  { id: 6, name: 'Psyduck', image: '/images/psyduck-scaled.png' },
+  { id: 7, name: 'Bunnelby', image: '/images/bunnelby-scaled.png' },
+  { id: 8, name: 'Slugma', image: '/images/slugma-scaled.png' },
+  { id: 9, name: 'Sunflora', image: '/images/sunflora-scaled.png' }
 ]

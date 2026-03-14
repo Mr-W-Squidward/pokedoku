@@ -30,9 +30,11 @@ export default function Cell({ value, locked, selected, highlighted, sameValue, 
 
   return (
     <div
-      className={`w-12 h-12 border border-gray-700 flex items-center justify-center cursor-pointer ${bg} ${locked ? 'opacity-50' : ''}`}
+      className={`w-12 h-12 border border-gray-700 flex items-center justify-center 
+        ${locked && value > 0 ? 'cursor-not-allowed' : 'cursor-pointer'} ${bg}`}
       onClick={onSelect}
       onDragOver={handleDragOver}
+      onDrop={handleDrop}
     >
       {pokemon && <img src={pokemon.image} alt={pokemon.name} width={25} height={25} />}
     </div>
