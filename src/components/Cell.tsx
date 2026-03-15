@@ -7,7 +7,7 @@ interface Props {
   highlighted: boolean
   sameValue: boolean
   mistake: boolean
-  extraBorder: boolean
+  extraBorder: string
   onSelect: () => void
   onDrop: (pokemonName: string) => void
 }
