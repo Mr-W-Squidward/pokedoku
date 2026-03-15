@@ -11,11 +11,12 @@ interface BoardProps {
   board: BoardData
   locked: boolean[][]
   selected: SelectedCell | null
+  mistakes: boolean[][]
   onSelect: (row: number, col: number) => void
   onDrop: (row: number, col: number, pokemonName: string) => void
 }
 
-export default function Board({ board, locked, selected, onSelect, onDrop }: BoardProps) {
+export default function Board({ board, locked, selected, mistakes, onSelect, onDrop }: BoardProps) {
   const selectedValue = selected ? board[selected.row][selected.col] : 0
 
   return (
@@ -23,9 +24,13 @@ export default function Board({ board, locked, selected, onSelect, onDrop }: Boa
       {board.map((row, rowIndex) =>
         row.map((value, colIndex) => {
           const isSelected = selected?.row === rowIndex && selected?.col === colIndex
-          const isHighlighted = !!selected && !!isSelected &&
+          const isHighlighted = !!selected && !isSelected &&
             (selected.row === rowIndex || selected.col === colIndex || (Math.floor(selected.row / 3) === Math.floor(rowIndex / 3) && Math.floor(selected.col / 3) === Math.floor(colIndex / 3)))
           const sameValue = selectedValue > 0 && value > 0 && value === selectedValue
+
+          // separation for 3x3 boxes
+          const borderRow = (rowIndex + 1) % 3 === 0 && rowIndex < 8 ? 'border-b-2 border-gray-400' : ''
+          const borderCol = (colIndex + 1) % 3 === 0 && colIndex < 8 ? 'border-r-2 border-gray-400' : ''
 
           return (
             <Cell
@@ -35,6 +40,8 @@ export default function Board({ board, locked, selected, onSelect, onDrop }: Boa
               selected={isSelected}
               highlighted={isHighlighted}
               sameValue={sameValue}
+              mistake={mistakes[rowIndex][colIndex]}
+              extraBorder={`${borderRow} ${borderCol}`}
               onSelect={() => onSelect(rowIndex, colIndex)}
               onDrop={(pokemonName) => onDrop(rowIndex, colIndex, pokemonName)}
             />
