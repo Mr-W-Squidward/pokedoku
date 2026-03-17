@@ -3,6 +3,8 @@ import Board from './components/Board'
 import Sidebar from './components/Sidebar'
 import { generatePokedoku } from './logic/pokedoku_generator'
 import { POKEMON } from './constants/pokemon'
+import { useAudio } from './hooks/useAudio'
+import MusicPlayer from './components/MusicPlayer'
 
 type SelectedCell = { row: number; col: number } | null
 
@@ -10,6 +12,7 @@ const DUMMY_BOARD = Array.from({ length: 9 }, () => new Array(9).fill(0))
 const DUMMY_LOCKED = Array.from({ length: 9 }, () => new Array(9).fill(false))
 
 export default function App() {
+  
   const [board, setBoard] = useState<number[][]>(DUMMY_BOARD)
   const [solution, setSolution] = useState<number[][]>(DUMMY_BOARD)
   const [locked, setLocked] = useState<boolean[][]>(DUMMY_LOCKED)
@@ -18,6 +21,13 @@ export default function App() {
   const [mistakes, setMistakes] = useState<boolean[][]>(
     Array.from({ length: 9 }, () => new Array(9).fill(false))
   )
+  const {
+    sfxOn, setSfxOn,
+    musicOn, trackTitle,
+    musicVolume, setMusicVolume,
+    togglePlay, nextTrack, prevTrack,
+    playCorrect, playIncorrect, playFinished, playGameOver
+  } = useAudio()
   const [won, setWon] = useState(false)
 
   const MAX_ERRORS = 3
@@ -71,6 +81,7 @@ export default function App() {
     if (!isCorrect) {
       const newErrors = errors + 1
       setErrors(newErrors)
+      playIncorrect()
       
       setMistakes(prev => {
         const next = prev.map(r => [...r])
@@ -87,6 +98,7 @@ export default function App() {
       }, 800)
 
       if (newErrors >= MAX_ERRORS) {
+        playGameOver()
         setTimeout(() => startNewGame(), 1000)
       }
       return
@@ -95,10 +107,14 @@ export default function App() {
     const newBoard = board.map(r => [...r])
     newBoard[row][col] = pokemon.id
     setBoard(newBoard)
+    playCorrect()
 
     // check win condition
     const complete = newBoard.every((r, i) => r.every((v, j) => v === solution[i][j]))
-    if (complete) setWon(true)
+    if (complete) {
+      setWon(true)
+      playFinished()
+    }
   }
 
   return (
@@ -106,6 +122,17 @@ export default function App() {
       {/* Header bar */}
       <div className="flex items-center gap-6">
         <h1 className="text-yellow-400 font-bold text-xl tracking-widest">POKÉDOKU</h1>
+        <MusicPlayer
+          trackTitle={trackTitle}
+          musicOn={musicOn}
+          onTogglePlay={togglePlay}
+          onNextTrack={nextTrack}
+          onPrevTrack={prevTrack}
+          musicVolume={musicVolume}
+          onVolumeChange={setMusicVolume}
+          sfxOn={sfxOn}
+          onToggleSfx={() => setSfxOn(on => !on)}
+        />
         <div className="flex gap-2 text-sm text-gray-400">
           Mistakes:
           {[...Array(MAX_ERRORS)].map((_, i) => (
