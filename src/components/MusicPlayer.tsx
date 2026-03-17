@@ -25,7 +25,7 @@ export default function MusicPlayer({ trackTitle, musicOn, onTogglePlay, onNextT
       </div>
 
       {/* Volume Control */}
-      <span className="text-gray-500">🔊</span>
+      <span className="text-gray-500">🎧</span>
       <input
         type="range"
         min={0}

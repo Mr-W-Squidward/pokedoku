@@ -39,40 +39,45 @@ export function useAudio() {
 
   // Music
   const musicRef = useRef<HTMLAudioElement | null>(null);
-  const randomTrackIndex = useCallback(() => Math.floor(Math.random() * MUSIC_TRACKS.length), []);
-  const [trackIndex, setTrackIndex] = useState<number>(() => randomTrackIndex());
+  if (musicRef.current === null) {
+    const audio = new Audio();
+    audio.loop = true;
+    audio.volume = 0.5;
+    musicRef.current = audio;
+  }
+  const [trackIndex, setTrackIndex] = useState<number>(() => Math.floor(Math.random() * MUSIC_TRACKS.length));
   const [musicOn, setMusicOn] = useState(true);
   const [musicVolume, setMusicVolume] = useState(0.5);
 
-  // Swap tracks on index change and volume/play state
+  // Cleanup on UNMOUNT
   useEffect(() => {
-    if (!musicRef.current) return;
-    const audio = musicRef.current;
-    audio.src = MUSIC_TRACKS[trackIndex].src;
-    audio.volume = musicVolume;
-    audio.loop = true;
-
-    if (musicOn) {
-      audio.play().catch(() => {});
-    } else {
-      audio.pause();
-    }
-  }, [trackIndex, musicOn, musicVolume]);
-
-  // Initiate audio
-  useEffect(() => {
-    const audio = new Audio(MUSIC_TRACKS[trackIndex].src);
-    audio.loop = true;
-    audio.volume = musicVolume;
-    musicRef.current = audio;
-    if (musicOn) {
-      audio.play().catch(() => {});
-    }
     return () => {
-      audio.pause();
-      audio.src = '';
-    }
+      musicRef.current?.pause();
+      if (musicRef.current) musicRef.current.src = '';
+    };
   }, []);
+
+  // Swap tracks on index change only
+  useEffect(() => {
+    const audio = musicRef.current;
+    if (!audio) return;
+    audio.src = MUSIC_TRACKS[trackIndex].src;
+    audio.loop = true;
+    if (musicOn) audio.play().catch(() => {});
+  }, [trackIndex]);
+
+  // PLAY AND PAUSE when musicOn changes
+  useEffect(() => {
+    const audio = musicRef.current;
+    if (!audio) return;
+    if (musicOn) audio.play().catch(() => {});
+    else audio.pause();
+  }, [musicOn])
+
+  // Adjust volume  when it changes
+  useEffect(() => {
+    if (musicRef.current) musicRef.current.volume = musicVolume;
+  }, [musicVolume])
 
   const togglePlay = useCallback(() => {
     const audio = musicRef.current;
