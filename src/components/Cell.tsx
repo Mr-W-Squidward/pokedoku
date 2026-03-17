@@ -48,14 +48,19 @@ export default function Cell({ value, locked, selected, highlighted, sameValue, 
 
   return (
     <div
-      className={`w-12 h-12 border border-gray-700 flex items-center justify-center 
+      className={`w-9 h-9 md:w-12 md:h-12 border border-gray-700 flex items-center justify-center 
         ${locked && value > 0 ? 'cursor-default' : 'cursor-pointer'} 
         ${bg} ${extraBorder} ${holdRing} transition-colors duration-150`}
       onClick={handleClick}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      {pokemon && <img src={pokemon.image} alt={pokemon.name} width={32} height={32} className={locked ? 'opacity-100' : 'opacity-90 hover:opacity-100'} draggable={false} />}
+      {pokemon && (
+        <img src={pokemon.image} 
+        alt={pokemon.name} 
+        width={32} height={32} 
+        className={`w-6 h-6 md:w-8 md:h-8 object-contain ${locked ? 'opacity-100' : 'opacity-90 hover:opacity-100'}`} 
+        draggable={false} />)}
     </div>
   )
 }

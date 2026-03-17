@@ -13,15 +13,18 @@ interface Props {
 export default function MusicPlayer({ trackTitle, musicOn, onTogglePlay, onNextTrack, onPrevTrack, musicVolume, onVolumeChange, sfxOn, onToggleSfx }: Props) {
   return (
     <div className="flex items-center gap-3 bg-[#1a2535] border border-gray-700 rounded-xl px-4 py-2 text-sm text-gray-300">
-      <div className="text-sm font-medium">{trackTitle}</div>
+      <div className="hidden md:block text-sm font-medium truncate max-w-32">{trackTitle}</div>
 
       {/* Music Controls */}
       <div className="flex items-center space-x-4">
-        <button onClick={onPrevTrack} className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600 transition-colors">◀◀</button>
-        <button onClick={onTogglePlay} className={`px-2 py-1 rounded transition-colors ${musicOn ? 'bg-green-600 hover:bg-green-500' : 'bg-gray-700 hover:bg-gray-600'}`}>
+        <button onClick={onPrevTrack} className="px-1.5 py-1 bg-gray-700 rounded hover:bg-gray-600 transition-colors text-xs">◀◀</button>
+        <button onClick={onTogglePlay} className={
+          `px-1.5 py-1 rounded transition-colors text-xs 
+          ${musicOn ? 'bg-green-600 hover:bg-green-500' : 'bg-gray-700 hover:bg-gray-600'}`}
+        >
           {musicOn ? '⏸' : '▶'}
         </button>
-        <button onClick={onNextTrack} className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600 transition-colors">▶▶</button>
+        <button onClick={onNextTrack} className="px-1.5 py-1 bg-gray-700 rounded hover:bg-gray-600 transition-colors text-xs">▶▶</button>
       </div>
 
       {/* Volume Control */}

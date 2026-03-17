@@ -122,7 +122,7 @@ export default function App() {
     <PokemonSelectProvider>
       <div className="min-h-screen bg-[#0f1923] flex flex-col items-center justify-center gap-4 p-6">
         {/* Header bar */}
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-6 w-full max-w-lg md:max-w-none">
           <h1 className="text-yellow-400 font-bold text-xl tracking-widest">POKÉDOKU</h1>
           <MusicPlayer
             trackTitle={trackTitle}
@@ -167,8 +167,7 @@ export default function App() {
           </div>
         )}
 
-        <div className="flex items-start gap-6">
-          <Sidebar />
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 w-full md:w-auto">
           <Board
             board={board}
             locked={locked}
@@ -177,6 +176,7 @@ export default function App() {
             onSelect={handleSelect}
             onDrop={handleDrop}
           />
+          <Sidebar />
         </div>
       </div>
     </PokemonSelectProvider>
