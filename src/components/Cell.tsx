@@ -51,7 +51,7 @@ export default function Cell({ value, locked, selected, highlighted, sameValue, 
       className={`w-12 h-12 border border-gray-700 flex items-center justify-center 
         ${locked && value > 0 ? 'cursor-default' : 'cursor-pointer'} 
         ${bg} ${extraBorder} ${holdRing} transition-colors duration-150`}
-      onClick={onSelect}
+      onClick={handleClick}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
