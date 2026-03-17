@@ -5,6 +5,7 @@ import { generatePokedoku } from './logic/pokedoku_generator'
 import { POKEMON } from './constants/pokemon'
 import { useAudio } from './hooks/useAudio'
 import MusicPlayer from './components/MusicPlayer'
+import { PokemonSelectProvider } from './context/PokemonSelectContext'
 
 type SelectedCell = { row: number; col: number } | null
 
@@ -118,64 +119,66 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f1923] flex flex-col items-center justify-center gap-4 p-6">
-      {/* Header bar */}
-      <div className="flex items-center gap-6">
-        <h1 className="text-yellow-400 font-bold text-xl tracking-widest">POKÉDOKU</h1>
-        <MusicPlayer
-          trackTitle={trackTitle}
-          musicOn={musicOn}
-          onTogglePlay={togglePlay}
-          onNextTrack={nextTrack}
-          onPrevTrack={prevTrack}
-          musicVolume={musicVolume}
-          onVolumeChange={setMusicVolume}
-          sfxOn={sfxOn}
-          onToggleSfx={() => setSfxOn(on => !on)}
-        />
-        <div className="flex gap-2 text-sm text-gray-400">
-          Mistakes:
-          {[...Array(MAX_ERRORS)].map((_, i) => (
-            <span key={i} className={i < errors ? 'text-red-400' : 'text-gray-600'}>✕</span>
-          ))}
+    <PokemonSelectProvider>
+      <div className="min-h-screen bg-[#0f1923] flex flex-col items-center justify-center gap-4 p-6">
+        {/* Header bar */}
+        <div className="flex items-center gap-6">
+          <h1 className="text-yellow-400 font-bold text-xl tracking-widest">POKÉDOKU</h1>
+          <MusicPlayer
+            trackTitle={trackTitle}
+            musicOn={musicOn}
+            onTogglePlay={togglePlay}
+            onNextTrack={nextTrack}
+            onPrevTrack={prevTrack}
+            musicVolume={musicVolume}
+            onVolumeChange={setMusicVolume}
+            sfxOn={sfxOn}
+            onToggleSfx={() => setSfxOn(on => !on)}
+          />
+          <div className="flex gap-2 text-sm text-gray-400">
+            Mistakes:
+            {[...Array(MAX_ERRORS)].map((_, i) => (
+              <span key={i} className={i < errors ? 'text-red-400' : 'text-gray-600'}>✕</span>
+            ))}
+          </div>
+          <button
+            onClick={startNewGame}
+            className="px-3 py-1 rounded bg-[#1a2535] border border-gray-600 text-gray-300 text-sm hover:bg-yellow-400 hover:text-black transition"
+          >
+            New Game
+          </button>
+          <button
+            onClick={erasureSelect}
+            className="px-3 py-1 rounded bg-[#1a2535] border border-gray-600 text-gray-300 text-sm hover:bg-red-500 hover:text-white transition"
+          >
+            Erase ⌫
+          </button>
         </div>
-        <button
-          onClick={startNewGame}
-          className="px-3 py-1 rounded bg-[#1a2535] border border-gray-600 text-gray-300 text-sm hover:bg-yellow-400 hover:text-black transition"
-        >
-          New Game
-        </button>
-        <button
-          onClick={erasureSelect}
-          className="px-3 py-1 rounded bg-[#1a2535] border border-gray-600 text-gray-300 text-sm hover:bg-red-500 hover:text-white transition"
-        >
-          Erase ⌫
-        </button>
+
+        {won && (
+          <div className="text-yellow-400 font-bold text-lg animate-bounce">
+            🏆 You solved it!
+          </div>
+        )}
+
+        {errors >= MAX_ERRORS && (
+          <div className="text-red-400 font-bold text-lg">
+            ✕ Too many mistakes — starting new game...
+          </div>
+        )}
+
+        <div className="flex items-start gap-6">
+          <Sidebar />
+          <Board
+            board={board}
+            locked={locked}
+            selected={selected}
+            mistakes={mistakes}
+            onSelect={handleSelect}
+            onDrop={handleDrop}
+          />
+        </div>
       </div>
-
-      {won && (
-        <div className="text-yellow-400 font-bold text-lg animate-bounce">
-          🏆 You solved it!
-        </div>
-      )}
-
-      {errors >= MAX_ERRORS && (
-        <div className="text-red-400 font-bold text-lg">
-          ✕ Too many mistakes — starting new game...
-        </div>
-      )}
-
-      <div className="flex items-start gap-6">
-        <Sidebar />
-        <Board
-          board={board}
-          locked={locked}
-          selected={selected}
-          mistakes={mistakes}
-          onSelect={handleSelect}
-          onDrop={handleDrop}
-        />
-      </div>
-    </div>
+    </PokemonSelectProvider>
   )
 }

@@ -1,4 +1,5 @@
 import { POKEMON } from "../constants/pokemon";
+import { usePokemonSelect } from "../context/PokemonSelectContext";
 
 interface Props {
   value: number
@@ -14,6 +15,7 @@ interface Props {
 
 export default function Cell({ value, locked, selected, highlighted, sameValue, mistake, extraBorder, onSelect, onDrop }: Props) {
   const pokemon = value > 0 ? POKEMON.find(p => p.id === value) : null
+  const { tappedPokemon, setTappedPokemon } = usePokemonSelect()
 
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault(); // allow dropping
@@ -25,6 +27,15 @@ export default function Cell({ value, locked, selected, highlighted, sameValue, 
     if (name) onDrop(name)
   }
 
+  const handleClick = () => {
+    if (tappedPokemon) {
+      onDrop(tappedPokemon)
+      setTappedPokemon(null)
+    } else {
+      onSelect()
+    }
+  }
+
   let bg = 'bg-[#1b2a3b]'
   if (mistake) bg = 'bg-red-900'
   else if (selected) bg = 'bg-blue-900' // all instances of pokemon
@@ -32,10 +43,14 @@ export default function Cell({ value, locked, selected, highlighted, sameValue, 
   else if (highlighted) bg = 'bg-#1f3040'
   else if (locked && value > 0) bg = 'bg-[#1b2535]' // locked and has pokemon
 
+  // extra styling (ring when dragging a pokemon and hovering over an unlocked cell)
+  const holdRing = tappedPokemon && !locked ? 'ring-1 ring-yellow-400/50' : ''
+
   return (
     <div
       className={`w-12 h-12 border border-gray-700 flex items-center justify-center 
-        ${locked && value > 0 ? 'cursor-default' : 'cursor-pointer'} ${bg} ${extraBorder} transition-colors duration-150`}
+        ${locked && value > 0 ? 'cursor-default' : 'cursor-pointer'} 
+        ${bg} ${extraBorder} ${holdRing} transition-colors duration-150`}
       onClick={onSelect}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
