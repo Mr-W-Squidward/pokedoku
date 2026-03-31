@@ -45,7 +45,12 @@ function solve(board: Board): boolean {
   return true;
 };
 
-export function generatePokedoku() {
+export function generatePokedoku(prefilled: number=65): { pokedoku: Board, solution: Board, locked: boolean[][] } {
+
+  // stuck between 17 and 70 cells (min and max to play...)
+  const clampPrefilled = Math.max(17, Math.min(prefilled, 70));
+  const toRemove = 81 - clampPrefilled;
+
   // generate a random board
   const solution: Board = Array.from({ length: 9 }, () => new Array(9).fill(0));
   solve(solution)
@@ -53,12 +58,11 @@ export function generatePokedoku() {
   const pokedoku = solution.map(row => row.slice());
   const locked: boolean[][] = Array.from({ length: 9 }, () => new Array(9).fill(true)); // lock some numbers from the board to create a puzzle
 
-  const cells = Array.from({ length: 81 }, (_, i) => i); // create an array of cell indices
-  const remove_cells = cells.sort(() => Math.random() - 0.5).slice(0, 40); // shuffle and take the first 40 indices
+  const cells = Array.from({ length: 81 }, (_, i) => i).sort(() => Math.random() - 0.5); // create an array of cell indices
 
-  for (const cell of remove_cells) {
-    const row = Math.floor(cell / 9);
-    const col = cell % 9;
+  for (let i = 0; i < toRemove; i++) {
+    const row = Math.floor(cells[i] / 9);
+    const col = cells[i] % 9;
     pokedoku[row][col] = 0; // remove the number from the puzzle
     locked[row][col] = false; // players can fill (since it's locked)
   }

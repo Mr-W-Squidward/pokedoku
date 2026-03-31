@@ -29,8 +29,8 @@ export default function Board({ board, locked, selected, mistakes, onSelect, onD
           const sameValue = selectedValue > 0 && value > 0 && value === selectedValue
 
           // separation for 3x3 boxes
-          const borderRow = (rowIndex + 1) % 3 === 0 && rowIndex < 8 ? 'border-b-2 border-gray-400' : ''
-          const borderCol = (colIndex + 1) % 3 === 0 && colIndex < 8 ? 'border-r-2 border-gray-400' : ''
+          const borderRow = (rowIndex + 1) % 3 === 0 && rowIndex < 8 ? 'border-b-[1.2px] border-b-gray-900' : 'border-b border-b-gray-700'
+          const borderCol = (colIndex + 1) % 3 === 0 && colIndex < 8 ? 'border-r-[1.2px] border-r-gray-900' : 'border-r border-r-gray-700'
 
           return (
             <Cell
