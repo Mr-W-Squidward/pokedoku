@@ -256,7 +256,7 @@ export default function App() {
           <div className="bg-[#1a2535] border border-gray-600 rounded-xl p-5 flex flex-col gap-4 w-72">
             <div>
               <label className="text-xs mb-1 block text-gray-400">
-                <span className="text-gray-600 ml-2">({70 - customPrefilled} to solve)</span>
+                <span className="text-gray-600 ml-2">({81 - customPrefilled} to solve)</span>
               </label>
               <input 
                 type="range" min={17} max={70} value={customPrefilled}
